@@ -1,6 +1,7 @@
-using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
+using System.Linq;
 
 public class SlotMachine : MonoBehaviour
 {
@@ -26,16 +27,21 @@ public class SlotMachine : MonoBehaviour
             slots[i] = Instantiate(slotPrefab, worldPos, Quaternion.identity);
         }
     }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    
+    public async void Spin()
     {
-        
-    }
+        List<Task<int>> tasks = new List<Task<int>>(SlotCount);
+        for (int i = 0; i < SlotCount; i++)
+        {
+            tasks.Add(slots[i].Spin());
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        await Task.WhenAll(tasks);
+
+        int[] results = tasks.Select(task => task.GetAwaiter().GetResult()).ToArray();
+        int first = results.First();
+        bool win = results.All(result => result == first);
+        Debug.Log(win ? "You win!" : "You lose!");
+        Debug.Log($"Results: {string.Join(", ", results)}");
     }
 }
