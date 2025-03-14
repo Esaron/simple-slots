@@ -152,6 +152,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   slotPrefab: {fileID: -2451301650253865470, guid: 2d55673fef10a7241b113a83c86eb1e4, type: 3}
 --- !u!4 &307703631
 Transform:
